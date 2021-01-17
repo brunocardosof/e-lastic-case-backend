@@ -4,7 +4,7 @@ namespace Source\Controller;
 
 use Source\Providers\EmailProvider;
 
-class Email {
+class EmailController {
 
   private $hasAttach = false;
   
