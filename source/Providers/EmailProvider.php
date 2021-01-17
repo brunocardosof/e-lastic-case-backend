@@ -1,12 +1,12 @@
 <?php
 
-namespace Source\Support;
+namespace Source\Providers;
 
 use Exception;
 use stdClass;
 use PHPMailer\PHPMailer\PHPMailer;
 
-class Email {
+class EmailProvider {
 
   private $mail;
   private $data;
@@ -30,7 +30,7 @@ class Email {
     $this->mail->Password = MAIL['password'];
   }
 
-  public function add(string $subject, string $body, string $recipient_name, string $recipient_email): Email {
+  public function add(string $subject, string $body, string $recipient_name, string $recipient_email): EmailProvider {
     $this->data->subject = $subject;
     $this->data->body = $body;
     $this->data->recipient_name = $recipient_name;
@@ -38,7 +38,7 @@ class Email {
     return $this;
   }
 
-  public function attach(string $filePath, string $fileName): Email {
+  public function attach(string $filePath, string $fileName): EmailProvider {
     $this->data->attach[$filePath] = $fileName;
     return $this;
   }
