@@ -7,3 +7,7 @@ define("MAIL",[
   "from_name" => "Bruno Cardoso",
   "from_email" => "bruno.cardosof@gmail.com",
 ]);
+
+define("BASE_URL", "http://localhost/e-lastic-case-php");
+
+define("PATH_UPLOADS_PDF", $_SERVER['DOCUMENT_ROOT'].'/e-lastic-case-php/uploads/pdf/');
