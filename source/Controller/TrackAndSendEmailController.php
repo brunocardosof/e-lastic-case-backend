@@ -65,8 +65,7 @@ class TrackAndSendEmailController{
     if(!empty($data["recipient_name"]) && !empty($data["recipient_email"])) {
       return [$data["recipient_name"], $data["recipient_email"]];
     } else {
-      // return ["Joao Macedo"," joao.macedo@elastic.fit"]
-      return ["Eddard Stark","eddardstark20155@hotmail.com"];
+      return ["Joao Macedo","joao.macedo@elastic.fit"];
     }
   }
 
