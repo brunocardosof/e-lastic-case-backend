@@ -8,11 +8,10 @@ use CoffeeCode\Router\Router;
 $router = new Router(BASE_URL);
 $router->namespace("Source\Controller");
 
-$router->group("correios");
-$router->post("/track", "CorreiosController:track");
+$router->post("/correios/track", "CorreiosController:track");
+$router->post("/email/send", "EmailController:send");
 
-$router->group("email");
-$router->post("/send", "EmailController:send");
+$router->post("/trackAndEmail", "TrackAndSendEmailController:send");
 
 $router->group("error");
 $router->get("/{errcode}", function($data) {
