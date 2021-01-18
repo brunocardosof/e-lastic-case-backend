@@ -9,8 +9,10 @@ use Dompdf\Dompdf;
 class TrackAndSendEmailController{
 
   public function send($data){  
-    $track = $this->track($data["trackCode"]);
-    $bodyHTML = $this->renderBodyEmail($track, $data["trackCode"]);
+    $trackCode = preg_split('@;@', $data["trackCode"], NULL, PREG_SPLIT_NO_EMPTY);
+    $trackCodeValidated = $this->validateTrackCode(($trackCode));
+    $track = $this->track($trackCode);
+    $bodyHTML = $this->renderBodyEmail($track, $trackCodeValidated);
     $pdf = $this->generatePDF($bodyHTML);
     $emailProvider = new EmailProvider();
     $emailProvider->add(
@@ -42,6 +44,13 @@ class TrackAndSendEmailController{
     $dompdf->setPaper("A4");
     $dompdf->render();
     return $dompdf->output();
+  }
+  private function validateTrackCode($trackCode) {
+    if(empty($trackCode)) {
+      return ["OA016913717BR"];
+    }else {
+      return $trackCode;
+    }
   }
   private function renderBodyEmail($track, $trackCode){
     $html = "
