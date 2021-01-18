@@ -33,10 +33,17 @@ class TrackAndSendEmailController{
   
   }
 
-  private function track($trackCode){
+  private function track($trackCode) {
     $correios = new CorreiosConsulta();
-    $out = $correios->rastrear($trackCode);
-    return $out;
+    $out = array();
+    if(count($trackCode) == 1) {
+      return $correios->rastrear($trackCode[0]);
+    } else {
+      for($i = 0; $i < count($trackCode); $i++){
+        array_push($out, $correios->rastrear($trackCode[$i]));
+      }  
+      return $out;
+    }
   }
 
   private function generatePDF($html){
@@ -63,7 +70,7 @@ class TrackAndSendEmailController{
     }
   }
 
-  private function renderBodyEmail($track, $trackCode){
+  private function renderBodyEmail($track, $trackCode): string {
     $html = "
     <html>
     <head>
@@ -82,6 +89,7 @@ class TrackAndSendEmailController{
       .titleCardEmailSender{
         margin-bottom: 30px;
         text-align: center;
+        color: #888888 !important;
       }
       .subTitleCardEmailSender {
         margin-bottom: 15px;
@@ -96,65 +104,90 @@ class TrackAndSendEmailController{
       }
       .cardListTrack {
         margin-bottom: 15px;
-        border: 1.5px solid #e34a5b;
+        border: 2px solid #e34a5b;
         border-radius: 5px;
-        width: 80%;
-      }
-      ul {
-        list-style-type: none;
-      }
-      h1, h4, li {
-        color: #383838 !important;
-      }
-      li {
-        padding: 5 0px 5 0px;
-      }
-      .cardListTrack{
+        width: 70%;
+        margin-left: 160px;
         text-align: center !important;
       }
-      .ulTrack{
-        margin-left: 210px;
+      ul {
+        list-style-type: none !important;
+      }
+      h1, h4, li {
+        color: #888888 !important;
+      }
+      li {
+        padding: 0px 0px 8px 0px;
+        list-style: none !important;
+        font-size: 22px !important;
+      }
+      strong {
+        font-size: 24px !important;
+      }
+      .correiosLink a{
+        font-size: 28px !important;
       }
     @media (max-width:480px)  {
       .cardListTrack {
         width: 100% !important;
-      }
-      .ulTrack{
         margin-left: 1px !important;
       }
     }
     @media (max-width:960px)  {
       .cardListTrack {
         width: 100% !important;
-      }
-      .ulTrack{
         margin-left: 1px !important;
       }
+    }
+    @page  
+    { 
+      margin: 5px 40px 5px 40px !important; 
+      list-style: none !important;
     }
     </style>
     </head>";
       $html .= "<div class='container'>";
-        // $html .= "<div class='wrapper'>";
           $html .= "<h1 class='titleCardEmailSender'>Histórico do Objeto</h1>";
-          $html .= "<h4 class='subTitleCardEmailSender'>Acompanhe o rastreio do objeto <a href='https://www2.correios.com.br/sistemas/rastreamento/default.cfm'>{$trackCode}</a></h4>";
-          $html .= "<ul class='ulTrack'> ";
-          foreach($track as $key => $value) {
-            $html .= "<div class='cardListTrack'>";
-              $html .= "<li>";
-                $html .= "Status: ".$value['status'];
-              $html .= "</li>";
+          if(count($trackCode) == 1) {
+            $html .= "<h2 class='subTitleCardEmailSender'>Acompanhe o rastreio do objeto <strong><a href='https://www2.correios.com.br/sistemas/rastreamento/default.cfm' class='correiosLink'>{$trackCode[0]}</a></strong></h2>";
+            $html .= "<ul class='ulTrack'> ";
+            foreach($track as $key => $value) {
+              $html .= "<div class='cardListTrack'>";
+                $html .= "<li>";
+                  $html .= "<strong>Status:</strong> ".$value['status'];
+                $html .= "</li>";
+  
+                $html .= "<li>";
+                  $html .= "<strong>Data:</strong> ". $value['data'];
+                $html .= "</li>";
+  
+                $html .= "<li>";
+                  $html .= "<strong>Local:</strong> ". $value['local'];
+                $html .= "</li>";
+              $html .= "</div>";
+            }
+            $html .= "</ul>";
+          } else {            
+            for($k = 0 ; $k < count($track); $k++) {
+              $html .= "<h2 class='subTitleCardEmailSender'>Acompanhe o rastreio do objeto <a href='https://www2.correios.com.br/sistemas/rastreamento/default.cfm'>{$trackCode[$k]}</a></h2>";                  
+                  for($j = 0 ; $j < count($track[$k]); $j++) {
+                    $html .= "<div class='cardListTrack'>";
+                    $html .= "<li>";
+                      $html .= "<strong>Status:</strong> ".$track[$k][$j]['status'];
+                    $html .= "</li>";
 
-              $html .= "<li>";
-                $html .= "Data: ". $value['data'];
-              $html .= "</li>";
-
-              $html .= "<li>";
-                $html .= "Local: ". $value['local'];
-              $html .= "</li>";
-            $html .= "</div>";
+                    $html .= "<li>";
+                      $html .= "<strong>Data:</strong> ". $track[$k][$j]['data'];
+                    $html .= "</li>";
+      
+                    $html .= "<li>";
+                      $html .= "<strong>Local:</strong> ". $track[$k][$j]['local'];
+                    $html .= "</li>";
+                    $html .= "</div>";
+                  }
+            }
+            $html .= "</ul>";
           }
-          $html .= "</ul>";
-        // $html .= "</div>";
       $html .= "</div>";
     $html .= "</html>";
     return $html;
