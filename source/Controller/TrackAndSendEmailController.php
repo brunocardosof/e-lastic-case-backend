@@ -14,12 +14,13 @@ class TrackAndSendEmailController{
     $track = $this->track($trackCode);
     $bodyHTML = $this->renderBodyEmail($track, $trackCodeValidated);
     $pdf = $this->generatePDF($bodyHTML);
+    $recipient = $this->validateRecipientNameAndEmail($data);  
     $emailProvider = new EmailProvider();
     $emailProvider->add(
       $data["subject"],
       $bodyHTML,
-      $data["recipient_name"],
-      $data["recipient_email"],
+      $recipient[0],
+      $recipient[1],
     )
     ->attach($pdf)
     ->send();
@@ -52,6 +53,16 @@ class TrackAndSendEmailController{
       return $trackCode;
     }
   }
+
+  private function validateRecipientNameAndEmail($data): array {
+    if(!empty($data["recipient_name"]) && !empty($data["recipient_email"])) {
+      return [$data["recipient_name"], $data["recipient_email"]];
+    } else {
+      // return ["Joao Macedo"," joao.macedo@elastic.fit"]
+      return ["Eddard Stark","eddardstark20155@hotmail.com"];
+    }
+  }
+
   private function renderBodyEmail($track, $trackCode){
     $html = "
     <html>
