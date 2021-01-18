@@ -4,48 +4,30 @@ namespace Source\Controller;
 
 use Cagartner\CorreiosConsulta\CorreiosConsulta;
 use Source\Providers\EmailProvider;
+use Dompdf\Dompdf;
 
 class TrackAndSendEmailController{
 
-  private $hasAttach = false;
-  
   public function send($data){  
     $track = $this->track($data["trackCode"]);
     $bodyHTML = $this->renderBodyEmail($track, $data["trackCode"]);
-    if(isset($_FILES['pdf'])) {
-      $this->hasAttach = true;
-      $path = PATH_UPLOADS_PDF;
-      $filename = $_FILES['pdf']['name'];
-      $fullPathFile = $path.$filename;
-      $tmpName= $_FILES['pdf']['tmp_name'];
-      move_uploaded_file($tmpName, $fullPathFile);
-    }
+    $pdf = $this->generatePDF($bodyHTML);
     $emailProvider = new EmailProvider();
-    if($this->hasAttach){      
     $emailProvider->add(
       $data["subject"],
       $bodyHTML,
       $data["recipient_name"],
       $data["recipient_email"],
-    // )->send();
-    )->attach(
-      $fullPathFile,
-      $filename
-    )->send();
-    } else {
-      $emailProvider->add(
-        $data["subject"],
-        $data["body"],
-        $data["recipient_name"],
-        $data["recipient_email"],
-      )->send();
-    }
+    )
+    ->attach($pdf)
+    ->send();
   
     if(!$emailProvider->error()) {
       echo json_encode(true);
     } else {
       echo json_encode($emailProvider->error()->getMessage());
     }
+  
   }
 
   private function track($trackCode){
@@ -54,6 +36,13 @@ class TrackAndSendEmailController{
     return $out;
   }
 
+  private function generatePDF($html){
+    $dompdf = new Dompdf();
+    $dompdf->loadHtml($html);
+    $dompdf->setPaper("A4");
+    $dompdf->render();
+    return $dompdf->output();
+  }
   private function renderBodyEmail($track, $trackCode){
     $html = "
     <html>
@@ -86,10 +75,10 @@ class TrackAndSendEmailController{
         font-size: 20px;
       }
       .cardListTrack {
-        margin: 15px auto 15px auto;
+        margin-bottom: 15px;
         border: 1.5px solid #e34a5b;
         border-radius: 5px;
-        width: 50%;
+        width: 80%;
       }
       ul {
         list-style-type: none;
@@ -103,14 +92,23 @@ class TrackAndSendEmailController{
       .cardListTrack{
         text-align: center !important;
       }
+      .ulTrack{
+        margin-left: 210px;
+      }
     @media (max-width:480px)  {
       .cardListTrack {
         width: 100% !important;
+      }
+      .ulTrack{
+        margin-left: 1px !important;
       }
     }
     @media (max-width:960px)  {
       .cardListTrack {
         width: 100% !important;
+      }
+      .ulTrack{
+        margin-left: 1px !important;
       }
     }
     </style>
@@ -119,7 +117,7 @@ class TrackAndSendEmailController{
         // $html .= "<div class='wrapper'>";
           $html .= "<h1 class='titleCardEmailSender'>Histórico do Objeto</h1>";
           $html .= "<h4 class='subTitleCardEmailSender'>Acompanhe o rastreio do objeto <a href='https://www2.correios.com.br/sistemas/rastreamento/default.cfm'>{$trackCode}</a></h4>";
-          $html .= "<ul id='ulTrack'> ";
+          $html .= "<ul class='ulTrack'> ";
           foreach($track as $key => $value) {
             $html .= "<div class='cardListTrack'>";
               $html .= "<li>";
