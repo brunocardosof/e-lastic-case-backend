@@ -38,8 +38,8 @@ class EmailProvider {
     return $this;
   }
 
-  public function attach(string $filePath, string $fileName): EmailProvider {
-    $this->data->attach[$filePath] = $fileName;
+  public function attach($pdf): EmailProvider {
+    $this->mail->addStringAttachment($pdf, 'file.pdf');
     return $this;
   }
 
@@ -49,13 +49,6 @@ class EmailProvider {
       $this->mail->msgHTML($this->data->body);
       $this->mail->addAddress($this->data->recipient_email, $this->data->recipient_name);
       $this->mail->setFrom($from_email, $from_name);
-
-      if(!empty($this->data->attach)){
-        foreach($this->data->attach as $path => $name) {
-          $this->mail->addAttachment($path, $name);
-        }
-      }
-
       $this->mail->send();
       return true;
     } catch (Exception $e) {
