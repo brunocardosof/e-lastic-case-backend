@@ -67,6 +67,10 @@ PORT=587
 USER=bruno.cardosof@gmail.com
 
 PASSWORD=*******
+
+FROM_NAME="Bruno Cardoso"
+
+FROM_EMAIL=bruno.cardosof@gmail.com
 *********************************************************************
 <h3>Utilizando a rota de rastreamento de objetos e envio de email</h3>
 
