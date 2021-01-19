@@ -99,3 +99,5 @@ https://github.com/brunocardosof/e-lastic-case-backend/blob/master/Insomnia-File
 </h1>
 
 Além do Insomnia, na pasta /frontend pode-se realizar o teste de envio de email utilizando algum server http.
+
+Se for modificado o nome da pasta raiz do projeto, é necessário configurar a variavel base_url em frontend/index.js
