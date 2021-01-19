@@ -1,5 +1,5 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT']."/e-lastic-case-php/vendor/autoload.php";
+require __DIR__ ."/../vendor/autoload.php";
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
 $dotenv->load();
@@ -13,6 +13,4 @@ define("MAIL",[
   "from_email" => $_ENV['FROM_EMAIL'],
 ]);
 
-define("BASE_URL", "http://localhost/e-lastic-case-php");
-
-define("PATH_UPLOADS_PDF", $_SERVER['DOCUMENT_ROOT'].'/e-lastic-case-php/uploads/pdf/');
+define("BASE_URL", "http://localhost/".__DIR__."/../");
