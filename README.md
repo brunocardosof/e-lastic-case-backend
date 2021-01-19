@@ -93,3 +93,9 @@ Para rastrear multiplos código, é necessário separa-los por ponto e virgula <
 </h1>
 
 https://github.com/brunocardosof/e-lastic-case-backend/blob/master/Insomnia-File.json
+
+<h1 align="left">
+  Frontend para teste
+</h1>
+
+Além do Insomnia, na pasta /frontend pode-se realizar o teste de envio de email utilizando algum server http.

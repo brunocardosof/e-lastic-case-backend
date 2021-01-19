@@ -1,0 +1,120 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  width: 100%;
+  background: #bbb;
+}
+:root {
+  --main-color: #e34a5b;
+  --second-color: #81b0d4;
+}
+
+.container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background: var(--main-color); */
+}
+.cardTrack {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 100px;
+}
+.inputCodeTrack {
+  width: 300px;
+  margin-bottom: 15px;
+  height: 50px;
+}
+.buttonTrack, .buttonSendEmail, .buttonOpenModalSenderEmail {
+  margin-left: 1px;
+  padding: 10px;
+  height: 50px;
+  background-color: var(--main-color);
+  padding: 8px;
+  border: none;
+  outline:none;
+  cursor: pointer;
+  color: white
+}
+  .buttonOpenModalSenderEmail {
+  margin-top: 20px;
+}
+.buttonTrack:hover, .buttonSendEmail:hover, .buttonOpenModalSenderEmail:hover{
+  background-color: var(--second-color);
+  transition:400ms
+}
+
+.cardEmailSender{
+  display: flex;
+  margin-top: 30px;
+  margin: 30px;
+  flex-direction: column;
+  align-items:center;
+  border: solid 2px var(--main-color);
+  border-radius: 15px;
+  max-height: 600px;
+  overflow-y: auto;
+
+}
+.wrapperCardEmailSender{
+  padding: 30px;
+}
+.titleCardEmailSender{
+  margin-bottom: 30px;
+  text-align: center;
+}
+.subTitleCardEmailSender{
+  margin-bottom: 15px;
+}
+ul {
+  list-style-type: none;
+}
+hr{
+  margin: 20px 0px 20px 0px;
+  border: 3px solid var(--main-color);
+  border-radius: 10px;
+}
+.buttonSendEmail {  
+  background-color: var(--main-color);
+}
+.inputSendEmail {
+  height: 30px;
+  border-radius: 20px;
+  outline:none;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.containerSendEmailInputs {
+  display: flex;
+  flex-direction: column;
+}
+.avisoEnvioDoHistorico{
+  text-align: center;
+  padding-top: 20px;
+  color: var(--main-color);
+  font-weight: 700;
+}
+::-webkit-input-placeholder {
+  text-align: center;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  text-align: center;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+  text-align: center;  
+}
+
+:-ms-input-placeholder {  
+  text-align: center; 
+}
